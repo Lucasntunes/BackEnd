@@ -24,5 +24,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value = "select a from Usuario a where a.email like %?1%")
     List<Usuario> findByemail (String email);
 
+    boolean existsByEmail(String email);
+
 
 }

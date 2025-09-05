@@ -48,6 +48,17 @@ public class Usuario {
     @Column(nullable = false,name="email",unique = true)
     private String email;
 
+    @Column(nullable = false,name="userId",unique = true)
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -70,5 +81,11 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void syncIds() {
+        this.userId = this.id;
     }
 }

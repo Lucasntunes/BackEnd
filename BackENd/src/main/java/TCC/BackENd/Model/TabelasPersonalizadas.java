@@ -10,12 +10,12 @@ public class TabelasPersonalizadas {
         return id;
     }
 
-    public int getIdAnt() {
-        return idAnt;
+    public int getIdAntibiotico() {
+        return idAntibiotico;
     }
 
-    public int getIdUSuario() {
-        return idUSuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     @Id
@@ -27,10 +27,10 @@ public class TabelasPersonalizadas {
     }
 
     @Column(nullable = false,name = "idAntibiotico")
-    private int idAnt;
+    private int idAntibiotico;
 
     @Column(nullable = false,name="idUsuario")
-    private int idUSuario;
+    private int idUsuario;
 
     @Column(nullable = false,name="nomeTabela")
     private String nomeTabela;
@@ -39,15 +39,16 @@ public class TabelasPersonalizadas {
         this.id = id;
     }
 
-    public void setIdAnt(int idAnt) {
-        this.idAnt = idAnt;
+    public void setIdAntibiotico(int idAntibiotico) {
+        this.idAntibiotico = idAntibiotico;
     }
 
-    public void setIdUSuario(int idUSuario) {
-        this.idUSuario = idUSuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public void setNomeTabela(String nomeTabela) {
         this.nomeTabela = nomeTabela;
     }
+
 }
