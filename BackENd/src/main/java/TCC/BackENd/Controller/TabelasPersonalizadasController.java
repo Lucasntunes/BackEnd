@@ -44,7 +44,7 @@ public class TabelasPersonalizadasController {
             @PathVariable int id,
             @PathVariable String nomeTabela)
     {
-        List<TabelasPersonalizadas> linhas = tab.findTabela(id, nomeTabela);
+        List<TabelasPersonalizadas> linhas = tab.findByIdUsuarioAndNomeTabela(id, nomeTabela);
 
         if (linhas.isEmpty()) {
             return null; // ou lançar exceção 404 se preferir
@@ -79,7 +79,7 @@ public class TabelasPersonalizadasController {
         }
 
         // verifica se já existe tabela com esse nome para o usuário
-        List<TabelasPersonalizadas> existentes = tab.findTabela(idUsuario, nomeTabela);
+        List<TabelasPersonalizadas> existentes = tab.findByIdUsuarioAndNomeTabela(idUsuario, nomeTabela);
         if (!existentes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe uma tabela com esse nome.");
         }
@@ -122,13 +122,13 @@ public class TabelasPersonalizadasController {
             return ResponseEntity.badRequest().body("O novo nome é igual ao nome atual.");
         }
 
-        List<TabelasPersonalizadas> linhasAntigas = tab.findTabela(idUsuario, nomeAntigo);
+        List<TabelasPersonalizadas> linhasAntigas = tab.findByIdUsuarioAndNomeTabela(idUsuario, nomeAntigo);
         if (linhasAntigas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tabela não encontrada.");
         }
 
         // verifica se já existe tabela com o nomeNovo para o mesmo usuário
-        List<TabelasPersonalizadas> conflito = tab.findTabela(idUsuario, nomeNovo);
+        List<TabelasPersonalizadas> conflito = tab.findByIdUsuarioAndNomeTabela(idUsuario, nomeNovo);
         if (!conflito.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe uma tabela com esse nome.");
         }
@@ -147,12 +147,29 @@ public class TabelasPersonalizadasController {
             @PathVariable int idUsuario,
             @PathVariable String nomeTabela) {
 
-        List<TabelasPersonalizadas> linhas = tab.findTabela(idUsuario, nomeTabela);
+        List<TabelasPersonalizadas> linhas = tab.findByIdUsuarioAndNomeTabela(idUsuario, nomeTabela);
         if (linhas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tabela não encontrada");
         }
 
         tab.deleteAll(linhas);
         return ResponseEntity.ok("Tabela deletada com sucesso");
+    }
+
+    @GetMapping("/contar/{idUsuario}")
+    public ResponseEntity<Map<String, Integer>> contarTabelas(@PathVariable int idUsuario) {
+        if (idUsuario <= 0) {
+            return ResponseEntity.badRequest().body(Map.of("erro", 0)); // ID inválido
+        }
+
+        List<TabelasPersonalizadas> linhas = tab.findByIdUsuario(idUsuario);
+
+        // Conta nomes distintos de tabela
+        long totalTabelas = linhas.stream()
+                .map(TabelasPersonalizadas::getNomeTabela)
+                .distinct()
+                .count();
+
+        return ResponseEntity.ok(Map.of("totalTabelas", (int) totalTabelas));
     }
 }

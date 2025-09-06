@@ -9,20 +9,20 @@ import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
-    @Query(value = "select a from Usuario a where a.username like %?1%")
-    List<Usuario> findByUsername (String username);
+    // Buscar usuários cujo username contém uma string
+    List<Usuario> findByUsername(String username);
 
-    @Query(value = "select a from Usuario a where a.senha like %?1%")
-    List<Usuario> findBySenha (String senha);
+    // Nunca use like em senha. Se quiser verificar senha, compare hash exato:
+    List<Usuario> findBySenha(String senhaHash);
 
-    @Query(value = "select a from Usuario a where a.pagoVersaoPro = ?1")
-    List<Usuario> findByVersao (boolean pagoVersaoPro);
+    // Versão Pro (boolean)
+    List<Usuario> findByPagoVersaoPro(boolean pagoVersaoPro);
 
-    @Query(value = "select a from Usuario a where a.telefone like %?1%")
-    List<Usuario> findBytelefone (String telefone);
+    // Telefone contendo
+    List<Usuario> findByTelefone(String telefone);
 
-    @Query(value = "select a from Usuario a where a.email like %?1%")
-    List<Usuario> findByemail (String email);
+    // Email exato (recomendado)
+    List<Usuario> findByEmail(String email);
 
     boolean existsByEmail(String email);
 
