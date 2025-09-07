@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/TabelasPersonalizadas")
+@CrossOrigin(origins = "*")
 public class TabelasPersonalizadasController {
     @Autowired
     TabelasPersonalizadasRepository tab;
@@ -24,11 +25,10 @@ public class TabelasPersonalizadasController {
     public List<TabelaDTO> listarTabelaPorId(@PathVariable int id) {
         List<TabelasPersonalizadas> linhas = tab.findByIdUsuario(id);
 
-        // Agrupar por nomeTabela
+
         Map<String, List<TabelasPersonalizadas>> agrupado =
                 linhas.stream().collect(Collectors.groupingBy(TabelasPersonalizadas::getNomeTabela));
 
-        // Transformar no DTO
         return agrupado.entrySet().stream()
                 .map(entry -> new TabelaDTO(
                         entry.getKey(),
